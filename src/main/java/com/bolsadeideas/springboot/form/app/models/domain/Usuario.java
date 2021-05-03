@@ -1,7 +1,9 @@
 package com.bolsadeideas.springboot.form.app.models.domain;
 
 import java.util.Date;
+import java.util.List;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -11,7 +13,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 
-import org.springframework.format.annotation.DateTimeFormat;
 
 import com.bolsadeideas.springboot.form.app.validation.IdentificadorRegex;
 import com.bolsadeideas.springboot.form.app.validation.Requerido;
@@ -50,13 +51,20 @@ public class Usuario {
 	//@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date fechaNacimiento;
 	
-	private String pais;
-
-	public String getPais() {
+	@NotNull
+	private Pais pais;
+	
+	@NotEmpty
+	private List<Role> roles;
+	
+	private Boolean habilitar;
+	
+	
+	public Pais getPais() {
 		return pais;
 	}
 
-	public void setPais(String pais) {
+	public void setPais(Pais pais) {
 		this.pais = pais;
 	}
 
@@ -123,4 +131,23 @@ public class Usuario {
 	public void setFechaNacimiento(Date fechaNacimiento) {
 		this.fechaNacimiento = fechaNacimiento;
 	}
+
+	public List<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(List<Role> roles) {
+		this.roles = roles;
+	}
+
+	public Boolean getHabilitar() {
+		return habilitar;
+	}
+
+	public void setHabilitar(Boolean habilitar) {
+		this.habilitar = habilitar;
+	}
+	
+	
+	
 }

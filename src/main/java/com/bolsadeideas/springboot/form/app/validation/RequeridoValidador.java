@@ -10,9 +10,9 @@ public class RequeridoValidador implements ConstraintValidator<Requerido, String
 	@Override
 	public boolean isValid(String value, ConstraintValidatorContext context) {
 		if (value == null || !StringUtils.hasText(value)) {
-			return true;
+			return false;
 		}
-		return false;
+		return true;
 	}
 
 }

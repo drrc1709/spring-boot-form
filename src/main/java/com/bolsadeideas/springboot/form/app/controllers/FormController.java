@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
@@ -63,6 +64,11 @@ public class FormController {
 		
 		binder.registerCustomEditor(Pais.class, "pais", paisEditor);
 		binder.registerCustomEditor(Role.class, "roles", rolEditor);
+	}
+	
+	@ModelAttribute("genero")
+	public List<String> genero(){
+		return Arrays.asList("Hombre", "Mujer");
 	}
 	
 	 @ModelAttribute("listaRoles")
@@ -122,6 +128,9 @@ public class FormController {
 		usuario.setApellido("Doe");
 		usuario.setIdentificador("143.453.453-K");
 		usuario.setHabilitar(true);
+		usuario.setValorSecreto("Algun valor");
+		usuario.setPais(new Pais(6, "CO", "Colombia"));
+		usuario.setRoles(Arrays.asList(new Role(2,"Usuario", "ROL_USER")));
 		model.addAttribute("titulo", "Formulario usuarios");
 		model.addAttribute("usuario", usuario);
 		
@@ -132,20 +141,29 @@ public class FormController {
 	public String procesar(
 			@Valid Usuario usuario,
 			BindingResult result,
-			Model model,
-			SessionStatus status
+			Model model
 			) {
-		//validador.validate(usuario, result);
-		model.addAttribute("titulo", "Resultado FORM");
 		
 		if (result.hasErrors()) {		
-					
+			model.addAttribute("titulo", "Resultado FORM");
 			return "form";
 		}
-				
-		model.addAttribute("Usuario", usuario);
-		status.setComplete();
-		
-		return "resultado";
+					
+		return "redirect:/ver";
 	}
+	
+	 @GetMapping("/ver")
+	 public String ver(
+			 @SessionAttribute(name="usuario", required=false) Usuario usuario,
+			 Model model,
+			SessionStatus status) {
+		 
+		 if(usuario == null) {
+			 return "redirect:/form";
+		 }
+		 
+		 model.addAttribute("titulo", "Resultado FORM");
+		 status.setComplete();
+		 return "resultado";
+	 }
 }
